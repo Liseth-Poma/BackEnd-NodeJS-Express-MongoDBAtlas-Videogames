@@ -1,4 +1,6 @@
-class User {
+
+class Formulario {
+
     constructor(nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal) {
       this.nombre = nombre;
       this.cedula = cedula;
@@ -11,4 +13,4 @@ class User {
     }
   }
   
-  module.exports = User;
+  module.exports = Formulario;

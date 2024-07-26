@@ -13,7 +13,7 @@ const PORT = appEnv.get('PORT') || 3000;
 // Conectar a la base de datos
 conexionBDD().then(() => {
   // Definir las rutas
-  app.use('/api/users', usuarioRutas);
+  app.use('/api/formulario', usuarioRutas);
 
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

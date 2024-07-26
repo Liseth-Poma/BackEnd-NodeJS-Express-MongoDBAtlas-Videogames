@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 // Importar el controlador de usuario
-const usuarioControlador = require('../controller/usuarioControlador');
+const formularioControlador = require('../controller/formularioControlador');
 
 // Definir las rutas
-router.get('/', usuarioControlador.getAllUsers);
-router.get('/:id', usuarioControlador.getUserById);
-router.post('/', usuarioControlador.createUser);
-router.put('/:id', usuarioControlador.updateUser);
-router.delete('/:id', usuarioControlador.deleteUser);
+router.get('/', formularioControlador.getAllFormularios);
+router.get('/:id', formularioControlador.getFormularioById);
+router.post('/', formularioControlador.createFormulario);
+router.put('/:id', formularioControlador.updateFormulario);
+router.delete('/:id', formularioControlador.deleteFormulario);
+
 
 module.exports = router;
