@@ -1,5 +1,5 @@
 const { getDB } = require('../config/conexion');
-const Formulario = require('./../model/formulario');
+const Formulario = require('../document/formulario');
 const { ObjectId } = require('mongodb');
 const { validateFormulario } = require('../validations/formularioValidation');
 
@@ -16,6 +16,12 @@ exports.getAllFormularios = async (req, res) => {
 
 exports.getFormularioById = async (req, res) => {
   const { id } = req.params;
+
+  // Verifica si el ID es un string hexadecimal válido
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ msg: 'Invalid ID format' });
+  }
+
   try {
     const db = getDB();
     const formulario = await db.collection('Formularios').findOne({ _id: new ObjectId(id) });
@@ -28,6 +34,7 @@ exports.getFormularioById = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
 
 exports.createFormulario = async (req, res) => {
   const { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal } = req.body;
@@ -84,3 +91,5 @@ exports.deleteFormulario = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+
