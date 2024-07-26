@@ -1,6 +1,7 @@
 const { getDB } = require('../config/conexion');
-const Formulario = require('../model/formulario');
+const Formulario = require('./../model/formulario');
 const { ObjectId } = require('mongodb');
+const { validateFormulario } = require('../validations/formularioValidation');
 
 exports.getAllFormularios = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ exports.getFormularioById = async (req, res) => {
     const db = getDB();
     const formulario = await db.collection('Formularios').findOne({ _id: new ObjectId(id) });
     if (!formulario) {
-      return res.status(404).json({ msg: 'Formulario no encontrado' });
+      return res.status(404).json({ msg: 'Formulario not found' });
     }
     res.json(formulario);
   } catch (err) {
@@ -30,6 +31,13 @@ exports.getFormularioById = async (req, res) => {
 
 exports.createFormulario = async (req, res) => {
   const { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal } = req.body;
+  const formularioData = { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal };
+  const errors = validateFormulario(formularioData);
+
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+
   try {
     const db = getDB();
     const formulario = new Formulario(nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal);
@@ -44,11 +52,18 @@ exports.createFormulario = async (req, res) => {
 exports.updateFormulario = async (req, res) => {
   const { id } = req.params;
   const { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal } = req.body;
+  const formularioData = { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal };
+  const errors = validateFormulario(formularioData);
+
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+
   try {
     const db = getDB();
     const updatedFormulario = await db.collection('Formularios').findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { $set: { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal } },
+      { $set: formularioData },
       { returnOriginal: false }
     );
     res.json(updatedFormulario.value);
@@ -63,7 +78,7 @@ exports.deleteFormulario = async (req, res) => {
   try {
     const db = getDB();
     await db.collection('Formularios').deleteOne({ _id: new ObjectId(id) });
-    res.json({ msg: 'Formulario eliminado' });
+    res.json({ msg: 'Formulario deleted' });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
