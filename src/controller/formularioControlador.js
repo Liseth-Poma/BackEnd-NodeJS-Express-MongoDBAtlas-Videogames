@@ -37,8 +37,8 @@ exports.getFormularioById = async (req, res) => {
 
 
 exports.createFormulario = async (req, res) => {
-  const { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal } = req.body;
-  const formularioData = { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal };
+  const { nombre, cedula, email, telefono, idVideojuego, codigoDescuento, total, subtotal, precio } = req.body;
+  const formularioData = { nombre, cedula, email, telefono, idVideojuego, codigoDescuento, total, subtotal, precio };
   const errors = validateFormulario(formularioData);
 
   if (errors.length > 0) {
@@ -47,7 +47,7 @@ exports.createFormulario = async (req, res) => {
 
   try {
     const db = getDB();
-    const formulario = new Formulario(nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal);
+    const formulario = new Formulario(nombre, cedula, email, telefono, idVideojuego, codigoDescuento, total, subtotal, precio);
     await db.collection('Formularios').insertOne(formulario);
     res.status(201).json(formulario);
   } catch (err) {
@@ -58,12 +58,13 @@ exports.createFormulario = async (req, res) => {
 
 exports.updateFormulario = async (req, res) => {
   const { id } = req.params;
-  const { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal } = req.body;
-  const formularioData = { nombre, cedula, email, telefono, idVideojuego, precio, total, subtotal };
+  const { nombre, cedula, email, telefono, idVideojuego, codigoDescuento, total, subtotal, precio } = req.body;
+  const formularioData = { nombre, cedula, email, telefono, idVideojuego, codigoDescuento, total, subtotal, precio };
   const errors = validateFormulario(formularioData);
 
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
+   // Verifica que todos los campos necesarios estén presentes
+   if (!nombre || !email || !cedula || !telefono || !idVideojuego || !precio || !subtotal || !total) {
+    return res.status(400).json({ msg: 'Por favor, rellene todos los campos' });
   }
 
   try {

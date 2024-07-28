@@ -1,15 +1,16 @@
 
 class Formulario {
 
-    constructor(nombre, cedula, email, telefono, idVideojuego, idDescuento, total, subtotal) {
+    constructor(nombre, cedula, email, telefono, idVideojuego, codigoDescuento, total, subtotal, precio) {
       this.nombre = nombre;
       this.cedula = cedula;
       this.email = email;
       this.telefono = telefono;
       this.idVideojuego = idVideojuego;
-      this.idDescuento = idDescuento;
+      this.codigoDescuento = codigoDescuento;
       this.total = total;
       this.subtotal = subtotal;
+      this.precio = precio;
     }
   }
   
